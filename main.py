@@ -1,54 +1,28 @@
 import telebot
-from telebot import types
+from math import *
 
+# Создание экземпляра бота
 bot = telebot.TeleBot('6720448392:AAGmJjOMLIzfy0OlNNJguIvP7LbS1V7NCfQ')
 
-
-# Handle the /start command
+# Обработчик команды /start
 @bot.message_handler(commands=['start'])
-def send_welcome(message):
-    # Create a custom keyboard with buttons
-    keyboard = types.ReplyKeyboardMarkup(row_width=2)
-    button1 = types.KeyboardButton('Найти объем сферы')
-    button2 = types.KeyboardButton('Найти площадь поверхности сферы')
-    button3 = types.KeyboardButton('Найти объем конуса')
+def start_message(message):
+    bot.send_message(message.chat.id, 'Привет, напиши формулу по которой нужна помощь!\nобъем сферы\nобъем конуса')
 
-    keyboard.add(button1, button2, button3)
-
-    # Send a welcome message with the custom keyboard
-    bot.reply_to(message, "Этот бот поможет тебе решить эти формулы:", reply_markup=keyboard)
-
-
-# Handle button clicks
-@bot.message_handler(func=lambda message: message.text == 'Button 1')
-def handle_button1(message):
-    # Perform action for Button 1
-    bot.reply_to(message, "You pressed Button 1!")
-
-
-@bot.message_handler(func=lambda message: message.text == 'Button 2')
-def handle_button2(message):
-    # Perform action for Button 2
-    bot.reply_to(message, "You pressed Button 2!")
-
-
-@bot.message_handler(func=lambda message: message.text == 'Button 3')
-def handle_button3(message):
-    # Perform action for Button 3
-    bot.reply_to(message, "You pressed Button 3!")
-
-
-# Handle user messages
+# Обработчик ответа на вопрос о возрасте
 @bot.message_handler(func=lambda message: True)
-def handle_message(message):
-    # Respond to user message
-    bot.reply_to(message, "You said: " + message.text)
+def sphere(message):
+    if message.text == 'объем сферы':
+        bot.send_message(message.chat.id, 'Введи значение R')
 
+@bot.message_handler(func=lambda message: True)
+def V_sphere(message):
+    if message.text.isdigit():
+        R = int(message.text)
+        Vsphere = 4 / 3 * pi * R ** 3
+        bot.send_message(message.chat.id, f'Объем: {Vsphere}')
+        # Вывод значения формулы
+        bot.send_message(message.chat.id, f'Значение формулы: {Vsphere}')
 
-
-
-
-
-
-# Start the bot
+# Запуск бота
 bot.polling()
